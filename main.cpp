@@ -4,6 +4,9 @@
 #include <memory>
 #include <vector>
 
+#include "BitBuffer.h"
+#include "ByteWriter.h"
+
 struct Node {
     uint32_t updateWeights() {
         if (s != '\0')
@@ -30,6 +33,7 @@ std::unique_ptr<Node> escNode = nullptr;
 Node* tree = nullptr;
 std::vector<Node*> nodes; // узлы, отсортированные по весам
 std::array<Node*, 256> cache;
+auto bitBuffer = BitBuffer(512);
 
 bool reorderWeights() {
     // Нужно найти узел, который нарушает упорядоченность
@@ -148,7 +152,7 @@ void update(unsigned char& value) {
         tree->updateWeights();
 }
 
-std::vector<unsigned char> getCodeFor(unsigned char& value) {
+void getCodeFor(unsigned char& value, ByteWriter& byteWriter) {
     std::vector<unsigned char> binaryCode;
 
     Node* node;
@@ -157,19 +161,20 @@ std::vector<unsigned char> getCodeFor(unsigned char& value) {
     else
         node = escNode.get();
 
+    bitBuffer.setCurrent(0);
+
     /* Выполняем проход от узла до корня, собирая код узла */
     while(node->p) {
         if(node->p->l == node)
-            binaryCode.push_back('0');
+            bitBuffer.append(0);
         else
-            binaryCode.push_back('1');
+            bitBuffer.append(1);
         node = node->p;
     }
 
     /* Переворачиваем, поскольку требуется пройти именно от корня к узлу */
-    std::reverse(binaryCode.begin(), binaryCode.end());
-
-    return binaryCode;
+    for (int i = bitBuffer.getCurrent() - 1; i >= 0 ; --i)
+        byteWriter.writeBit(bitBuffer.get(i));
 }
 
 void write(unsigned char& value) {
@@ -199,6 +204,8 @@ int main(int argc, char **argv) {
     escNode->s = '\0';
     escNode->w = 0;
 
+    ByteWriter byteWriter("testout.ahf");
+
     tree = escNode.get(); // инициализация пустого дерева esc-узлом
 
     /*TODO: надо как-то свести к минимуму количество запросов за памятью */
@@ -209,8 +216,6 @@ int main(int argc, char **argv) {
     fin.seekg(0);
     uint32_t counter = 0;
 
-    std::vector<unsigned char> encodedSequence; // закодированная выходная последовательность
-
     while(!fin.eof() && counter < fileSize) {
         unsigned char ch;
         fin.read((char*)&ch, sizeof(char));
@@ -218,17 +223,15 @@ int main(int argc, char **argv) {
         if (cache[ch & 0xff]) {
             /* Символ уже есть */
             /* Получаем для него код, выдаем код в выходной поток */
-            auto bitCode = getCodeFor(ch);
-            encodedSequence.insert(encodedSequence.end(), bitCode.begin(), bitCode.end());
+            getCodeFor(ch, byteWriter);
         }
         else {
             /* Символа еще нет */
             /* Получаем код для esc-узла, выдаем его код в выходную последовательность */
             /* Затем выдаем незакодированный символ в выходной поток */
             unsigned char nullSymbol = '\0';
-            auto bitCode = getCodeFor(nullSymbol);
-            encodedSequence.insert(encodedSequence.end(), bitCode.begin(), bitCode.end());
-            encodedSequence.push_back(ch);
+            getCodeFor(nullSymbol, byteWriter);
+            byteWriter.writeByte(ch);
         }
 
         update(ch); // обновление дерева
@@ -238,6 +241,5 @@ int main(int argc, char **argv) {
 
     fin.close();
 
-    for(const auto& c : encodedSequence)
-        std::cout<<c<<" ";
+    byteWriter.close();
 }
