@@ -21,7 +21,7 @@ private:
     int bitWritten;
     int bytesWritten;
 
-    std::ofstream output;
+    std::ofstream* output;
 };
 
 

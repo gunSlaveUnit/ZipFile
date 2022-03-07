@@ -6,9 +6,9 @@
 
 #include "ByteWriter.h"
 
-ByteWriter::ByteWriter(const std::string& outputFileName) {
-    std::ofstream fin(outputFileName, std::ios::out | std::ios::binary);
-    if(!fin.is_open())
+ByteWriter::ByteWriter(const std::string& outputFileName) : bitWritten(0), bytesWritten(0) {
+    output = new std::ofstream(outputFileName, std::ios::out | std::ios::binary);
+    if(!output->is_open())
         std::cout<<"no file";
 }
 
@@ -24,8 +24,9 @@ void ByteWriter::writeBit(int bit) {
     }
     bitWritten += 1;
     if (bitIndex + 1 == 8) {
-        output << bitBuffer;
+        *output << bitBuffer;
         bytesWritten += 1;
+        std::cout<<"Out byte "<<bytesWritten<<std::endl;
     }
 }
 
@@ -39,9 +40,9 @@ void ByteWriter::writeByte(unsigned char value) {
 
 void ByteWriter::close() {
     if ((bitWritten & 0b111) != 0) {
-        output << bitBuffer;
+        *output << bitBuffer;
         bytesWritten += 1;
     }
-    output.flush();
-    output.close();
+    output->flush();
+    output->close();
 }
