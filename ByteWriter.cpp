@@ -26,7 +26,6 @@ void ByteWriter::writeBit(int bit) {
     if (bitIndex + 1 == 8) {
         *output << bitBuffer;
         bytesWritten += 1;
-        std::cout<<"Out byte "<<bytesWritten<<std::endl;
     }
 }
 
