@@ -2,10 +2,14 @@
 // Created by gunSlaveUnit on 07.03.2022.
 //
 
+#include <iostream>
+
 #include "ByteWriter.h"
 
-ByteWriter::ByteWriter(std::ofstream &output) {
-
+ByteWriter::ByteWriter(const std::string& outputFileName) {
+    std::ofstream fin(outputFileName, std::ios::out | std::ios::binary);
+    if(!fin.is_open())
+        std::cout<<"no file";
 }
 
 void ByteWriter::writeBit(int bit) {

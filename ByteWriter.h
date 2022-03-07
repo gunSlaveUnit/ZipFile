@@ -11,7 +11,7 @@
 
 class ByteWriter {
 public:
-    explicit ByteWriter(std::ofstream& output);
+    explicit ByteWriter(const std::string& outputFileName);
     void writeBit(int bit);
     void writeByte(int value);
     void close();
