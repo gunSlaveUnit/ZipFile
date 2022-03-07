@@ -3,4 +3,4 @@ project(AdapvitveHaffman)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(AdapvitveHaffman main.cpp BitBuffer.cpp BitBuffer.h)
+add_executable(AdapvitveHaffman main.cpp BitBuffer.cpp BitBuffer.h ByteWriter.cpp ByteWriter.h)
