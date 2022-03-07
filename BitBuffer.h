@@ -16,6 +16,7 @@ public:
     explicit BitBuffer(int size);
     void append(int value);
     void setCurrent(int current);
+    int getCurrent();
     int get(int index);
 private:
     static constexpr int BITES_IN_BYTE = 8;

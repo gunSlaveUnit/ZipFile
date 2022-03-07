@@ -34,3 +34,7 @@ int BitBuffer::get(int index) {
 void BitBuffer::setCurrent(int current) {
     this->currentBit = current;
 }
+
+int BitBuffer::getCurrent() {
+    return currentBit;
+}
