@@ -29,7 +29,7 @@ void ByteWriter::writeBit(int bit) {
     }
 }
 
-void ByteWriter::writeByte(int value) {
+void ByteWriter::writeByte(unsigned char value) {
     int mask = 1;
     for (int i = 0; i < 8; ++i) {
         writeBit((value & mask) > 0 ? 1 : 0);
