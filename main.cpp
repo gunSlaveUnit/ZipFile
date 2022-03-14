@@ -172,23 +172,6 @@ std::vector<unsigned char> getCodeFor(unsigned char& value) {
     return binaryCode;
 }
 
-void write(unsigned char& value) {
-    //std::ofstream fout("out.txt", std::ios::out | std::ios::binary);
-    //if(!fout.is_open())
-        //std::cout<<"no file";
-
-
-
-
-
-    //fout.flush();
-    //fout.close();
-}
-
-void clear(Node* n) {
-
-}
-
 int main(int argc, char **argv) {
     std::ifstream fin("test.txt", std::ios::in | std::ios::binary | std::ios::ate);
     if(!fin.is_open())
