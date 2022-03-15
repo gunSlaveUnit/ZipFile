@@ -6,7 +6,7 @@
 
 // uint8_t?
 
-std::ofstream out("output.bin");
+std::ofstream out("War and Peace.ahf");
 
 class FileWriter {
 public:
@@ -25,7 +25,7 @@ public:
         if (bitIndex + 1 == 8) {
             out << bitBuffer;
             bytesWritten += 1;
-            std::cout<<bytesWritten<<std::endl;
+            //std::cout<<bytesWritten<<std::endl;
         }
     }
     void writeByte(unsigned char byte) {
@@ -35,8 +35,16 @@ public:
             mask <<= 1;
         }
     }
+    void close() {
+        if ((bitWritten & 0b111) != 0) {
+            out << bitBuffer;
+            bytesWritten += 1;
+        }
+        out.flush();
+        out.close();
+    }
 private:
-    unsigned int bitBuffer;
+    unsigned char bitBuffer;
 
     int bitWritten;
     int bytesWritten;
@@ -212,7 +220,7 @@ void getCodeFor(unsigned char& value) {
 }
 
 int main(int argc, char **argv) {
-    std::ifstream fin("w.txt", std::ios::in | std::ios::binary | std::ios::ate);
+    std::ifstream fin("War and Peace.txt", std::ios::in | std::ios::binary | std::ios::ate);
     if(!fin.is_open())
         std::cout<<"no file";
 
@@ -255,4 +263,5 @@ int main(int argc, char **argv) {
     }
 
     fin.close();
+    fileWriter.close();
 }
