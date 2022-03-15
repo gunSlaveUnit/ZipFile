@@ -76,7 +76,6 @@ std::unique_ptr<Node> escNode = nullptr;
 Node* tree = nullptr;
 std::vector<Node*> nodes; // узлы, отсортированные по весам
 std::array<Node*, 256> cache;
-auto bitBuffer = BitBuffer(512);
 
 bool reorderWeights() {
     // Нужно найти узел, который нарушает упорядоченность
@@ -204,8 +203,6 @@ void getCodeFor(unsigned char& value) {
     else
         node = escNode.get();
 
-    bitBuffer.setCurrent(0);
-
     /* Выполняем проход от узла до корня, собирая код узла */
     while(node->p) {
         if(node->p->l == node)
@@ -231,8 +228,6 @@ int main(int argc, char **argv) {
     escNode = std::make_unique<Node>();
     escNode->s = '\0';
     escNode->w = 0;
-
-    ByteWriter byteWriter("testout.ahf");
 
     tree = escNode.get(); // инициализация пустого дерева esc-узлом
 
