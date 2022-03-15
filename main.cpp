@@ -4,8 +4,51 @@
 #include <memory>
 #include <vector>
 
-#include "BitBuffer.h"
-#include "ByteWriter.h"
+// uint8_t?
+
+std::ofstream out("War and Peace.ahf");
+
+class FileWriter {
+public:
+    void writeBit(unsigned char bit) {
+        unsigned char bitIndex = bitWritten & 0b111;
+        unsigned char mask = 1 << bitIndex;
+        switch (bit) {
+            case 1:
+                bitBuffer |= mask;
+                break;
+            case 0:
+                bitBuffer &= ~mask;
+                break;
+        }
+        bitWritten += 1;
+        if (bitIndex + 1 == 8) {
+            out << bitBuffer;
+            bytesWritten += 1;
+            //std::cout<<bytesWritten<<std::endl;
+        }
+    }
+    void writeByte(unsigned char byte) {
+        unsigned char mask = 1;
+        for (int i = 0; i < 8; i++) {
+            writeBit((byte & mask) > 0 ? 1 : 0);
+            mask <<= 1;
+        }
+    }
+    void close() {
+        if ((bitWritten & 0b111) != 0) {
+            out << bitBuffer;
+            bytesWritten += 1;
+        }
+        out.flush();
+        out.close();
+    }
+private:
+    unsigned char bitBuffer;
+
+    int bitWritten;
+    int bytesWritten;
+} fileWriter;
 
 struct Node {
     uint32_t updateWeights() {
@@ -152,7 +195,7 @@ void update(unsigned char& value) {
         tree->updateWeights();
 }
 
-void getCodeFor(unsigned char& value, ByteWriter& byteWriter) {
+void getCodeFor(unsigned char& value) {
     std::vector<unsigned char> binaryCode;
 
     Node* node;
@@ -166,36 +209,21 @@ void getCodeFor(unsigned char& value, ByteWriter& byteWriter) {
     /* Выполняем проход от узла до корня, собирая код узла */
     while(node->p) {
         if(node->p->l == node)
-            bitBuffer.append(0);
+            binaryCode.push_back(0);
         else
-            bitBuffer.append(1);
+            binaryCode.push_back(1);
         node = node->p;
     }
 
     /* Переворачиваем, поскольку требуется пройти именно от корня к узлу */
-    for (int i = bitBuffer.getCurrent() - 1; i >= 0 ; --i)
-        byteWriter.writeBit(bitBuffer.get(i));
-}
+    std::reverse(binaryCode.begin(), binaryCode.end());
 
-void write(unsigned char& value) {
-    //std::ofstream fout("out.txt", std::ios::out | std::ios::binary);
-    //if(!fout.is_open())
-        //std::cout<<"no file";
-
-
-
-
-
-    //fout.flush();
-    //fout.close();
-}
-
-void clear(Node* n) {
-
+    for(const auto& b : binaryCode)
+        fileWriter.writeBit(b);
 }
 
 int main(int argc, char **argv) {
-    std::ifstream fin("test.txt", std::ios::in | std::ios::binary | std::ios::ate);
+    std::ifstream fin("War and Peace.txt", std::ios::in | std::ios::binary | std::ios::ate);
     if(!fin.is_open())
         std::cout<<"no file";
 
@@ -223,15 +251,15 @@ int main(int argc, char **argv) {
         if (cache[ch & 0xff]) {
             /* Символ уже есть */
             /* Получаем для него код, выдаем код в выходной поток */
-            getCodeFor(ch, byteWriter);
+            getCodeFor(ch);
         }
         else {
             /* Символа еще нет */
             /* Получаем код для esc-узла, выдаем его код в выходную последовательность */
             /* Затем выдаем незакодированный символ в выходной поток */
             unsigned char nullSymbol = '\0';
-            getCodeFor(nullSymbol, byteWriter);
-            byteWriter.writeByte(ch);
+            getCodeFor(nullSymbol);
+            fileWriter.writeByte(ch);
         }
 
         update(ch); // обновление дерева
@@ -240,6 +268,5 @@ int main(int argc, char **argv) {
     }
 
     fin.close();
-
-    byteWriter.close();
+    fileWriter.close();
 }
