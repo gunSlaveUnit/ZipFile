@@ -12,7 +12,7 @@
 class ByteWriter {
 public:
     explicit ByteWriter(const std::string& outputFileName);
-    void writeBit(int bit);
+    void writeBit(unsigned char bit);
     void writeByte(unsigned char value);
     void close();
 private:

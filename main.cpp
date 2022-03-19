@@ -5,52 +5,7 @@
 #include <vector>
 
 #include "BitBuffer.h"
-
-// uint8_t?
-
-std::ofstream out("War and Peace.ahf");
-
-class FileWriter {
-public:
-    void writeBit(unsigned char bit) {
-        unsigned char bitIndex = bitWritten & 0b111;
-        unsigned char mask = 1 << bitIndex;
-        switch (bit) {
-            case 1:
-                bitBuffer |= mask;
-                break;
-            case 0:
-                bitBuffer &= ~mask;
-                break;
-        }
-        bitWritten += 1;
-        if (bitIndex + 1 == 8) {
-            out << bitBuffer;
-            bytesWritten += 1;
-            //std::cout<<bytesWritten<<std::endl;
-        }
-    }
-    void writeByte(unsigned char byte) {
-        unsigned char mask = 1;
-        for (int i = 0; i < 8; i++) {
-            writeBit((byte & mask) > 0 ? 1 : 0);
-            mask <<= 1;
-        }
-    }
-    void close() {
-        if ((bitWritten & 0b111) != 0) {
-            out << bitBuffer;
-            bytesWritten += 1;
-        }
-        out.flush();
-        out.close();
-    }
-private:
-    unsigned char bitBuffer;
-
-    int bitWritten;
-    int bytesWritten;
-} fileWriter;
+#include "ByteWriter.h"
 
 struct Node {
     uint32_t updateWeights() {
@@ -73,6 +28,8 @@ struct Node {
     uint32_t w;
     Node *l, *r, *p;
 };
+
+ByteWriter writer("War and Peace.ahf");
 
 std::unique_ptr<Node> escNode = nullptr;
 Node* tree = nullptr;
@@ -216,7 +173,7 @@ void getCodeFor(unsigned char& value) {
 
     /* Переворачиваем, поскольку требуется пройти именно от корня к узлу */
     for (int i = bitBuffer.getCurrent() - 1; i >= 0 ; --i)
-        fileWriter.writeBit(bitBuffer.get(i));
+        writer.writeBit(bitBuffer.get(i));
 }
 
 int main(int argc, char **argv) {
@@ -254,7 +211,7 @@ int main(int argc, char **argv) {
             /* Затем выдаем незакодированный символ в выходной поток */
             unsigned char nullSymbol = '\0';
             getCodeFor(nullSymbol);
-            fileWriter.writeByte(ch);
+            writer.writeByte(ch);
         }
 
         update(ch); // обновление дерева
@@ -263,5 +220,5 @@ int main(int argc, char **argv) {
     }
 
     fin.close();
-    fileWriter.close();
+    writer.close();
 }
