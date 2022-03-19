@@ -13,7 +13,7 @@ void BitBuffer::append(int value) {
     else
         bytes[byteIndex] = bytes[byteIndex] & ~masks[bitIndex];
 
-    ++currentBit += 1;
+    ++currentBit;
 }
 
 BitBuffer::BitBuffer(int size) : size(size), currentBit(0) {

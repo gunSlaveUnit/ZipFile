@@ -4,6 +4,8 @@
 #include <memory>
 #include <vector>
 
+#include "BitBuffer.h"
+
 // uint8_t?
 
 std::ofstream out("War and Peace.ahf");
@@ -195,7 +197,7 @@ void update(unsigned char& value) {
 }
 
 void getCodeFor(unsigned char& value) {
-    std::vector<unsigned char> binaryCode;
+    BitBuffer bitBuffer(8);
 
     Node* node;
     if (value)
@@ -206,17 +208,15 @@ void getCodeFor(unsigned char& value) {
     /* Выполняем проход от узла до корня, собирая код узла */
     while(node->p) {
         if(node->p->l == node)
-            binaryCode.push_back(0);
+            bitBuffer.append(0);
         else
-            binaryCode.push_back(1);
+            bitBuffer.append(1);
         node = node->p;
     }
 
     /* Переворачиваем, поскольку требуется пройти именно от корня к узлу */
-    std::reverse(binaryCode.begin(), binaryCode.end());
-
-    for(const auto& b : binaryCode)
-        fileWriter.writeBit(b);
+    for (int i = bitBuffer.getCurrent() - 1; i >= 0 ; --i)
+        fileWriter.writeBit(bitBuffer.get(i));
 }
 
 int main(int argc, char **argv) {
