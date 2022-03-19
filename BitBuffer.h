@@ -18,6 +18,7 @@ public:
     void setCurrent(int current);
     int getCurrent();
     int get(int index);
+    std::vector<unsigned char> bytes;
 private:
     static constexpr int BITES_IN_BYTE = 8;
     static constexpr unsigned char masks[BITES_IN_BYTE] = {
@@ -26,7 +27,6 @@ private:
     };
     int size;
     int currentBit{};
-    std::vector<unsigned char> bytes;
 };
 
 
