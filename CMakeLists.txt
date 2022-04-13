@@ -8,4 +8,4 @@ add_executable(AdaptiveHuffman
         BitBuffer.cpp BitBuffer.h
         ByteWriter.cpp ByteWriter.h
         Coder.cpp Coder.h
-        AdaptiveHuffman.cpp AdaptiveHuffman.h)
+        AdaptiveHuffmanCoder.cpp AdaptiveHuffmanCoder.h)
