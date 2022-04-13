@@ -13,7 +13,7 @@
 
 class BitBuffer {
 public:
-    explicit BitBuffer(int size);
+    explicit BitBuffer();
     void append(int value);
     void setCurrent(int current);
     int getCurrent();
