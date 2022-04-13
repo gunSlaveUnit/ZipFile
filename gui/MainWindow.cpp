@@ -7,4 +7,15 @@
 MainWindow::MainWindow() {
     setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     setWindowTitle(WINDOW_TITLE);
+
+    centralWidget = new QGraphicsView(this);
+    centralLayout = new QGridLayout(centralWidget);
+
+    selectFileButton = new QPushButton(tr("Select"));
+}
+
+MainWindow::~MainWindow() {
+    delete selectFileButton;
+    delete centralLayout;
+    delete centralWidget;
 }
