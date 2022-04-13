@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.21)
-project(AdapvitveHaffman)
+project(AdaptiveHuffman)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(AdapvitveHaffman
+add_executable(AdaptiveHuffman
         main.cpp
         BitBuffer.cpp BitBuffer.h
         ByteWriter.cpp ByteWriter.h
         Coder.cpp Coder.h
-        AdapviteHaffmanCoder.cpp AdapviteHaffmanCoder.h)
+        AdaptiveHuffman.cpp AdaptiveHuffman.h)

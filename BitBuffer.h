@@ -4,8 +4,8 @@
 
 #pragma once
 
-#ifndef ADAPVITVEHAFFMAN_BITBUFFER_H
-#define ADAPVITVEHAFFMAN_BITBUFFER_H
+#ifndef ADAPTIVE_HUFFMAN_BIT_BUFFER_H
+#define ADAPTIVE_HUFFMAN_BIT_BUFFER_H
 
 #include <cstdint>
 #include <vector>
@@ -30,4 +30,4 @@ private:
 };
 
 
-#endif //ADAPVITVEHAFFMAN_BITBUFFER_H
+#endif //ADAPTIVE_HUFFMAN_BIT_BUFFER_H
