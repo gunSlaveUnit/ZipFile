@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <QMainWindow>
 
-#include "AdaptiveHuffmanCoder.h"
+#include "coder/AdaptiveHuffmanCoder.h"
 
 
 int main(int argc, char **argv) {

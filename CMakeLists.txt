@@ -17,10 +17,10 @@ find_package(Qt6 COMPONENTS
 
 add_executable(AdaptiveHuffman
         main.cpp
-        BitBuffer.cpp BitBuffer.h
-        ByteWriter.cpp ByteWriter.h
-        Coder.cpp Coder.h
-        AdaptiveHuffmanCoder.cpp AdaptiveHuffmanCoder.h Node.cpp Node.h)
+        coder/BitBuffer.cpp coder/BitBuffer.h
+        coder/ByteWriter.cpp coder/ByteWriter.h
+        coder/Coder.cpp coder/Coder.h
+        coder/AdaptiveHuffmanCoder.cpp coder/AdaptiveHuffmanCoder.h coder/Node.cpp coder/Node.h)
 
 target_link_libraries(AdaptiveHuffman
         Qt::Core
