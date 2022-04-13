@@ -20,7 +20,7 @@ add_executable(AdaptiveHuffman
         coder/BitBuffer.cpp coder/BitBuffer.h
         coder/ByteWriter.cpp coder/ByteWriter.h
         coder/Coder.cpp coder/Coder.h
-        coder/AdaptiveHuffmanCoder.cpp coder/AdaptiveHuffmanCoder.h coder/Node.cpp coder/Node.h)
+        coder/AdaptiveHuffmanCoder.cpp coder/AdaptiveHuffmanCoder.h coder/Node.cpp coder/Node.h gui/MainWindow.cpp gui/MainWindow.h)
 
 target_link_libraries(AdaptiveHuffman
         Qt::Core
