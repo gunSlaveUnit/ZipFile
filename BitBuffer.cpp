@@ -16,7 +16,7 @@ void BitBuffer::append(int value) {
     ++currentBit;
 }
 
-BitBuffer::BitBuffer(int size) : size(size), currentBit(0) {
+BitBuffer::BitBuffer() : size(8), currentBit(0) {
     int sizeInBytes = size >> 3;
 
     if(size % 8 > 0)
