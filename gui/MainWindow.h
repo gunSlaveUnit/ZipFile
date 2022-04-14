@@ -9,6 +9,8 @@
 #include <QPushButton>
 #include <QGridLayout>
 #include <QGraphicsView>
+#include <QLabel>
+#include <QFileDialog>
 
 
 class MainWindow final: public QMainWindow {
@@ -16,12 +18,15 @@ class MainWindow final: public QMainWindow {
 public:
     MainWindow();
     ~MainWindow() override;
+public slots:
+    void openFileDialog();
 private:
     const qint32 WINDOW_WIDTH = 300, WINDOW_HEIGHT = 200;
     const QString WINDOW_TITLE = "ZipFile";
 
     QGraphicsView *centralWidget;
     QGridLayout *centralLayout;
+    QLabel *selectedFileName;
     QPushButton *selectFileButton;
 };
 
