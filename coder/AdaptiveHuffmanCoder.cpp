@@ -31,7 +31,7 @@ void AdaptiveHuffmanCoder::encode(const std::string &filename) {
     fin.seekg(0);
 
     auto fileExtToEncode = path.extension().string().erase(0, 1);
-    unsigned char extLength = fileExtToEncode.length();
+    uint_fast32_t extLength = fileExtToEncode.length();
     writer.writeByte(extLength);
     for(unsigned char c : fileExtToEncode)
         writer.writeByte(c);
@@ -71,9 +71,6 @@ void AdaptiveHuffmanCoder::decode(const std::string &filename) {
     if (!fin.is_open())
         throw std::runtime_error((std::stringstream("Can' open file ") << filename << " to encode data").str());
 
-    std::filesystem::path path(filename);
-    ByteWriter writer((std::stringstream() << path.stem().string() << ".txt").str());
-
     /* esc-узел, пустой, с нулевым весом (частой) */
     escNode = std::make_unique<Node>();
     escNode->s = '\0';
@@ -87,6 +84,10 @@ void AdaptiveHuffmanCoder::decode(const std::string &filename) {
     nodes.resize(1);
 
     fin.seekg(0);
+
+    std::filesystem::path path(filename);
+    ByteWriter writer((std::stringstream() << path.stem().string() << ".txt").str());
+
     uint32_t counter = 0;
 
     mode = UNENCODED_BYTE;
