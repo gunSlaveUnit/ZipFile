@@ -4,7 +4,7 @@
 
 #include "Node.h"
 
-uint32_t Node::updateWeights() {
+uint_fast32_t Node::updateWeights() {
     if (s != '\0')
         return w;
     else {

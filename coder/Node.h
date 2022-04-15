@@ -9,10 +9,10 @@
 
 
 struct Node {
-    uint32_t updateWeights();
+    uint_fast32_t updateWeights();
 
     unsigned char s;
-    uint32_t w;
+    uint_fast32_t w;
     Node *l, *r, *p;
 };
 
