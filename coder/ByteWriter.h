@@ -8,18 +8,19 @@
 #define ADAPTIVE_HUFFMAN_BYTE_WRITER_H
 
 #include <fstream>
+#include <sstream>
 
 class ByteWriter {
 public:
-    explicit ByteWriter(const std::string& outputFileName);
-    void writeBit(unsigned char bit);
-    void writeByte(unsigned char value);
+    explicit ByteWriter(const std::string &outputFileName);
+    void writeBit(const unsigned char &bit);
+    void writeByte(const unsigned char &value);
     void close();
 private:
     unsigned char bitBuffer;
 
-    int bitWritten;
-    int bytesWritten;
+    uint32_t bitWritten;
+    uint32_t bytesWritten;
 
     std::ofstream* output;
 };

@@ -6,13 +6,13 @@
 
 #include "ByteWriter.h"
 
-ByteWriter::ByteWriter(const std::string& outputFileName) : bitWritten(0), bytesWritten(0) {
+ByteWriter::ByteWriter(const std::string &outputFileName) : bitWritten(0), bytesWritten(0) {
     output = new std::ofstream(outputFileName, std::ios::out | std::ios::binary);
-    if(!output->is_open())
-        std::cout<<"no file";
+    if (!output->is_open())
+        throw std::runtime_error((std::stringstream() << "Can't open file " << outputFileName).str());
 }
 
-void ByteWriter::writeBit(unsigned char bit) {
+void ByteWriter::writeBit(const unsigned char &bit) {
     unsigned char bitIndex = bitWritten & 0b111;
     unsigned char mask = 1 << bitIndex;
     switch (bit) {
@@ -29,7 +29,7 @@ void ByteWriter::writeBit(unsigned char bit) {
     }
 }
 
-void ByteWriter::writeByte(unsigned char value) {
+void ByteWriter::writeByte(const unsigned char &value) {
     unsigned char mask = 1;
     for (int i = 0; i < 8; ++i) {
         writeBit((value & mask) > 0 ? 1 : 0);
