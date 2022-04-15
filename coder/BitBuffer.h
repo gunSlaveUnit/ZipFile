@@ -14,19 +14,19 @@
 class BitBuffer {
 public:
     explicit BitBuffer();
-    void append(int value);
-    void setCurrent(int current);
-    int getCurrent();
-    int get(int index);
+    void append(const unsigned char &bit);
+    void setCurrent(const uint_fast32_t &current);
+    [[nodiscard]] uint_fast32_t getCurrent() const;
+    [[nodiscard]] uint_fast32_t get(const uint_fast32_t &index) const;
     std::vector<unsigned char> bytes;
 private:
-    static constexpr int BITES_IN_BYTE = 8;
+    static constexpr uint_fast32_t BITES_IN_BYTE = 8;
     static constexpr unsigned char masks[BITES_IN_BYTE] = {
             0b00000001, 0b00000010, 0b00000100, 0b00001000,
             0b00010000, 0b00100000, 0b01000000, 0b10000000
     };
-    int size;
-    int currentBit{};
+    uint_fast32_t size;
+    uint_fast32_t currentBit{};
 };
 
 
