@@ -2,6 +2,7 @@
 // Created by gunSlaveUnit on 13.04.2022.
 //
 
+#include <iostream>
 #include "AdaptiveHuffmanCoder.h"
 
 void AdaptiveHuffmanCoder::encode(const std::string &filename) {
@@ -28,9 +29,16 @@ void AdaptiveHuffmanCoder::encode(const std::string &filename) {
     nodes.resize(1);
 
     fin.seekg(0);
+
+    auto fileExtToEncode = path.extension().string().erase(0, 1);
+    unsigned char extLength = fileExtToEncode.length();
+    writer.writeByte(extLength);
+    for(unsigned char c : fileExtToEncode)
+        writer.writeByte(c);
+
     uint32_t counter = 0;
 
-    while (!fin.eof() && counter < fileSize) {
+    while (!fin.eof()) {
         unsigned char ch;
         fin.read((char *) &ch, sizeof(char));
 
