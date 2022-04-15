@@ -2,7 +2,6 @@
 // Created by gunSlaveUnit on 13.04.2022.
 //
 
-#include <iostream>
 #include "AdaptiveHuffmanCoder.h"
 
 void AdaptiveHuffmanCoder::encode(const std::string &filename) {
@@ -11,10 +10,6 @@ void AdaptiveHuffmanCoder::encode(const std::string &filename) {
     std::ifstream fin(filename, std::ios::in | std::ios::binary | std::ios::ate);
     if (!fin.is_open())
         throw std::runtime_error((std::stringstream("Can' open file ") << filename << " to encode data").str());
-
-    std::filesystem::path path(filename);
-    auto outFilename = (std::stringstream() << path.stem().string() << EXT).str();
-    ByteWriter writer(outFilename);
 
     /* esc-узел, пустой, с нулевым весом (частой) */
     escNode = std::make_unique<Node>();
@@ -30,10 +25,15 @@ void AdaptiveHuffmanCoder::encode(const std::string &filename) {
 
     fin.seekg(0);
 
+    std::filesystem::path path(filename);
+    auto outFilename = (std::stringstream() << path.stem().string() << EXT).str();
+    ByteWriter writer(outFilename);
+
     auto fileExtToEncode = path.extension().string().erase(0, 1);
-    uint_fast32_t extLength = fileExtToEncode.length();
+    unsigned char extLength = fileExtToEncode.length();
     writer.writeByte(extLength);
-    for(unsigned char c : fileExtToEncode)
+
+    for (unsigned char c: fileExtToEncode)
         writer.writeByte(c);
 
     uint32_t counter = 0;
@@ -86,7 +86,17 @@ void AdaptiveHuffmanCoder::decode(const std::string &filename) {
     fin.seekg(0);
 
     std::filesystem::path path(filename);
-    ByteWriter writer((std::stringstream() << path.stem().string() << ".txt").str());
+    unsigned char fileExtLength;
+    fin.read((char *) &fileExtLength, sizeof(char));
+
+    std::string ext;
+    for (uint_fast32_t i = 0; i < fileExtLength; ++i) {
+        unsigned char c;
+        fin.read((char *) &c, sizeof(char));
+        ext += c;
+    }
+
+    ByteWriter writer((std::stringstream() << path.stem().string() << "." << ext).str());
 
     uint32_t counter = 0;
 
@@ -254,7 +264,8 @@ void AdaptiveHuffmanCoder::getCodeFor(const unsigned char &value, ByteWriter &wr
 }
 
 void AdaptiveHuffmanCoder::handleBit(const unsigned char &bit, ByteWriter &writer) {
-    if (mode == UNENCODED_BYTE) { // если мы сейчас читаем незакодированный символ, то пишем бит в буфер, пока не накопится 8 бит
+    if (mode ==
+        UNENCODED_BYTE) { // если мы сейчас читаем незакодированный символ, то пишем бит в буфер, пока не накопится 8 бит
         decoderBuffer.append(bit);
         if (decoderBuffer.getCurrent() == 8) {   // если накопили 8 бит, то
             update(decoderBuffer.bytes[0]);    // обновляем модель считанным незакодированным символом
