@@ -25,10 +25,10 @@ public:
     void clear();
 private:
     bool reorderWeights();
-    void update(unsigned char& value);
-    void getCodeFor(unsigned char& value, ByteWriter& writer);
-    void handleBit(int bit, ByteWriter& writer);
-    void write(unsigned char b, ByteWriter& writer);
+    void update(const unsigned char &value);
+    void getCodeFor(const unsigned char &value, ByteWriter &writer);
+    void handleBit(const unsigned char &bit, ByteWriter &writer);
+    void handleByte(const unsigned char &byte, ByteWriter &writer);
 
     std::unique_ptr<Node> escNode;
     Node* tree;

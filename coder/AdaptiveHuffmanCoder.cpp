@@ -88,7 +88,7 @@ void AdaptiveHuffmanCoder::decode(const std::string &filename) {
         unsigned char ch;
         fin.read((char *) &ch, sizeof(char));
 
-        write(ch, writer);
+        handleByte(ch, writer);
 
         ++counter;
     }
@@ -164,7 +164,7 @@ bool AdaptiveHuffmanCoder::reorderWeights() {
     return false;
 }
 
-void AdaptiveHuffmanCoder::update(unsigned char &value) {
+void AdaptiveHuffmanCoder::update(const unsigned char &value) {
     auto checkingIndex = value & 0xff;
     Node *parent; // родитель узла, для обновления веса
     auto node = cache[checkingIndex];
@@ -221,7 +221,7 @@ void AdaptiveHuffmanCoder::update(unsigned char &value) {
         tree->updateWeights();
 }
 
-void AdaptiveHuffmanCoder::getCodeFor(unsigned char &value, ByteWriter &writer) {
+void AdaptiveHuffmanCoder::getCodeFor(const unsigned char &value, ByteWriter &writer) {
     BitBuffer bitBuffer;
 
     Node *node;
@@ -244,9 +244,8 @@ void AdaptiveHuffmanCoder::getCodeFor(unsigned char &value, ByteWriter &writer) 
         writer.writeBit(bitBuffer.get(i));
 }
 
-void AdaptiveHuffmanCoder::handleBit(int bit, ByteWriter &writer) {
-    if (mode ==
-        UNENCODED_BYTE) { // если мы сейчас читаем незакодированный символ, то пишем бит в буфер, пока не накопится 8 бит
+void AdaptiveHuffmanCoder::handleBit(const unsigned char &bit, ByteWriter &writer) {
+    if (mode == UNENCODED_BYTE) { // если мы сейчас читаем незакодированный символ, то пишем бит в буфер, пока не накопится 8 бит
         decoderBuffer.append(bit);
         if (decoderBuffer.getCurrent() == 8) {   // если накопили 8 бит, то
             update(decoderBuffer.bytes[0]);    // обновляем модель считанным незакодированным символом
@@ -272,10 +271,10 @@ void AdaptiveHuffmanCoder::handleBit(int bit, ByteWriter &writer) {
     }
 }
 
-void AdaptiveHuffmanCoder::write(unsigned char b, ByteWriter &writer) {
+void AdaptiveHuffmanCoder::handleByte(const unsigned char &byte, ByteWriter &writer) {
     unsigned char mask = 1;
     for (int i = 0; i < 8; ++i) {
-        handleBit((b & mask) > 0 ? 1 : 0, writer);
+        handleBit((byte & mask) > 0 ? 1 : 0, writer);
         mask <<= 1;
     }
 }
