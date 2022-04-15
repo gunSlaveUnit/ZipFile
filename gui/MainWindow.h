@@ -12,6 +12,8 @@
 #include <QLabel>
 #include <QFileDialog>
 
+#include "../coder/AdaptiveHuffmanCoder.h"
+
 
 class MainWindow final: public QMainWindow {
     Q_OBJECT
@@ -24,10 +26,13 @@ private:
     const qint32 WINDOW_WIDTH = 300, WINDOW_HEIGHT = 200;
     const QString WINDOW_TITLE = "ZipFile";
 
+    AdaptiveHuffmanCoder coder;
+
     QGraphicsView *centralWidget;
     QGridLayout *centralLayout;
     QLabel *selectedFileName;
     QPushButton *selectFileButton;
+    QPushButton *startButton;
 };
 
 

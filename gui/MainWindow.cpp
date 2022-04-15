@@ -18,6 +18,13 @@ MainWindow::MainWindow() {
     selectFileButton = new QPushButton(tr("Select"));
     centralLayout->addWidget(selectFileButton, 0, 1);
     connect(selectFileButton, SIGNAL(clicked(bool)), this, SLOT(openFileDialog()));
+
+    startButton = new QPushButton(tr("Start"));
+    centralLayout->addWidget(startButton, 1, 0);
+    connect(startButton, &QPushButton::clicked, this,
+            [=] () {
+        coder.encode(selectedFileName->text().toStdString());
+    });
 }
 
 MainWindow::~MainWindow() {
