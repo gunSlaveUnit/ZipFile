@@ -19,8 +19,8 @@ public:
 private:
     unsigned char bitBuffer;
 
-    uint32_t bitWritten;
-    uint32_t bytesWritten;
+    uint_fast32_t bitWritten;
+    uint_fast32_t bytesWritten;
 
     std::ofstream* output;
 };
