@@ -30,11 +30,11 @@ void AdaptiveHuffmanCoder::encode(const std::string &filename) {
     ByteWriter writer(outFilename);
 
     auto fileExtToEncode = path.extension().string().erase(0, 1);
-    unsigned char extLength = fileExtToEncode.length();
-    writer.writeByte(extLength);
 
     for (unsigned char c: fileExtToEncode)
         writer.writeByte(c);
+
+    writer.writeByte('\0');
 
     uint32_t counter = 0;
 
@@ -86,15 +86,17 @@ void AdaptiveHuffmanCoder::decode(const std::string &filename) {
     fin.seekg(0);
 
     std::filesystem::path path(filename);
-    unsigned char fileExtLength;
-    fin.read((char *) &fileExtLength, sizeof(char));
 
     std::string ext;
-    for (uint_fast32_t i = 0; i < fileExtLength; ++i) {
+    do {
         unsigned char c;
         fin.read((char *) &c, sizeof(char));
+
+        if (c == '\0')
+            break;
+
         ext += c;
-    }
+    } while (true);
 
     ByteWriter writer((std::stringstream() << path.stem().string() << "." << ext).str());
 
