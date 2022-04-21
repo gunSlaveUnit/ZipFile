@@ -2,6 +2,7 @@
 // Created by gunSlaveUnit on 13.04.2022.
 //
 
+#include <iostream>
 #include "AdaptiveHuffmanCoder.h"
 
 void AdaptiveHuffmanCoder::encode(const std::string &filename) {
@@ -30,16 +31,13 @@ void AdaptiveHuffmanCoder::encode(const std::string &filename) {
     ByteWriter writer(outFilename);
 
     auto fileExtToEncode = path.extension().string().erase(0, 1);
-
     for (unsigned char c: fileExtToEncode)
         writer.writeByte(c);
-
     writer.writeByte('\0');
 
     uint32_t counter = 0;
-
-    while (!fin.eof()) {
-        unsigned char ch;
+    unsigned char ch;
+    while (!fin.eof() && counter < fileSize) {
         fin.read((char *) &ch, sizeof(char));
 
         if (cache[ch & 0xff]) {
@@ -87,26 +85,25 @@ void AdaptiveHuffmanCoder::decode(const std::string &filename) {
 
     std::filesystem::path path(filename);
 
+    uint32_t counter = 0;
     std::string ext;
-    do {
-        unsigned char c;
-        fin.read((char *) &c, sizeof(char));
+    unsigned char c;
+    while (fin >> c) {
+        ++counter;
 
         if (c == '\0')
             break;
 
         ext += c;
-    } while (true);
+    }
 
     ByteWriter writer((std::stringstream() << path.stem().string() << "." << ext).str());
-
-    uint32_t counter = 0;
 
     mode = UNENCODED_BYTE;
     decoderBuffer = BitBuffer();
 
+    unsigned char ch;
     while (!fin.eof() && counter < fileSize) {
-        unsigned char ch;
         fin.read((char *) &ch, sizeof(char));
 
         handleByte(ch, writer);
