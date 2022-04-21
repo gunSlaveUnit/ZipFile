@@ -191,6 +191,10 @@ void AdaptiveHuffmanCoder::update(const unsigned char &value) {
         /* Добавляем вес, отмечаем его родителя для корректировки весов */
         node->w++;
         parent = node->p;
+
+        if (node->w > INT32_MAX - 10)
+            for(auto &n : cache)
+                node->w /= 2;
     } else {
         /* Узла с такими данными нет */
         auto escNodeParent = escNode->p;
