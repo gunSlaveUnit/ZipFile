@@ -4,7 +4,7 @@
 
 #include "BitBuffer.h"
 
-BitBuffer::BitBuffer() : size(8), currentBit(0) {
+BitBuffer::BitBuffer() : size(1024), currentBit(0) {
     uint_fast32_t sizeInBytes = size >> 3;
 
     if (size % 8 > 0)
