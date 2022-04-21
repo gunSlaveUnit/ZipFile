@@ -22,7 +22,7 @@ MainWindow::MainWindow() {
     startButton = new QPushButton(tr("Start"));
     centralLayout->addWidget(startButton, 1, 0);
     connect(startButton, &QPushButton::clicked, this,
-            [=] () {
+            [this] () {
         coder.encode(selectedFileName->text().toStdString());
     });
 }
