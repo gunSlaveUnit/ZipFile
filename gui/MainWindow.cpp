@@ -26,17 +26,15 @@ MainWindow::MainWindow() {
 
     startButton = new QPushButton(tr("Start"));
     centralLayout->addWidget(startButton, 3, 0);
-    connect(startButton, &QPushButton::clicked, this,
-            [this] () {
-        coder.encode(selectedFileName->text().toStdString());
-    });
 
     closeButton = new QPushButton(tr("Close"));
     centralLayout->addWidget(closeButton, 3, 1);
     connect(closeButton, &QPushButton::clicked, this,
-            [this] () {
+            [this]() {
                 this->close();
             });
+
+    connectMethodDependMode();
 }
 
 MainWindow::~MainWindow() {
@@ -51,8 +49,35 @@ MainWindow::~MainWindow() {
 void MainWindow::openFileDialog() {
     auto dialog = QFileDialog(this);
     dialog.setFileMode(QFileDialog::AnyFile);
+
     auto filename = dialog.getOpenFileName();
     QFileInfo fi(filename);
     filename = fi.fileName();
     selectedFileName->setText(filename.isEmpty() ? "Not Selected" : filename);
+    auto ext = fi.completeSuffix();
+    setWorkingModeDependFileExt(ext);
+}
+
+void MainWindow::setWorkingModeDependFileExt(const QString &ext) {
+    if (ext == "ahf")
+        MODE = DECODE;
+    else
+        MODE = ENCODE;
+
+    connectMethodDependMode();
+}
+
+void MainWindow::connectMethodDependMode() {
+    startButton->disconnect();
+
+    if (MODE == ENCODE)
+        connect(startButton, &QPushButton::clicked, this,
+                [this]() {
+                    coder.encode(selectedFileName->text().toStdString());
+                });
+    else
+        connect(startButton, &QPushButton::clicked, this,
+                [this]() {
+                    coder.decode(selectedFileName->text().toStdString());
+                });
 }

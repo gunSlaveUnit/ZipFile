@@ -16,26 +16,37 @@
 #include "../coder/AdaptiveHuffmanCoder.h"
 
 
-class MainWindow final: public QMainWindow {
-    Q_OBJECT
+class MainWindow final : public QMainWindow {
+Q_OBJECT
 public:
     MainWindow();
+
     ~MainWindow() override;
+
 public slots:
+
     void openFileDialog();
+    void connectMethodDependMode();
+
 private:
     const qint32 WINDOW_WIDTH = 300, WINDOW_HEIGHT = 200;
     const QString WINDOW_TITLE = "ZipFile";
     QGraphicsView *centralWidget;
     QGridLayout *centralLayout;
-    QLabel* fileLabel;
+    QLabel *fileLabel;
     QLabel *selectedFileName;
     QPushButton *selectFileButton;
-    QSplitter* splitter;
+    QSplitter *splitter;
     QPushButton *startButton;
     QPushButton *closeButton;
 
+    enum WORKING_MODES {
+        ENCODE, DECODE
+    };
+    uint32_t MODE = ENCODE;
     AdaptiveHuffmanCoder coder;
+
+    void setWorkingModeDependFileExt(const QString &ext);
 };
 
 
