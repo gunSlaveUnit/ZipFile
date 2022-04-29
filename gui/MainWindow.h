@@ -36,7 +36,6 @@ private:
     QLabel *fileLabel;
     QLabel *selectedFileName;
     QPushButton *selectFileButton;
-    QSplitter *splitter;
     QPushButton *startButton;
     QPushButton *closeButton;
 

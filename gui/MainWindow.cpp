@@ -21,14 +21,11 @@ MainWindow::MainWindow() {
     centralLayout->addWidget(selectFileButton, 1, 0);
     connect(selectFileButton, SIGNAL(clicked(bool)), this, SLOT(openFileDialog()));
 
-    splitter = new QSplitter;
-    centralLayout->addWidget(splitter, 2, 0, 1, 2);
-
     startButton = new QPushButton(tr("Start"));
-    centralLayout->addWidget(startButton, 3, 0);
+    centralLayout->addWidget(startButton, 2, 0);
 
     closeButton = new QPushButton(tr("Close"));
-    centralLayout->addWidget(closeButton, 3, 1);
+    centralLayout->addWidget(closeButton, 2, 1);
     connect(closeButton, &QPushButton::clicked, this,
             [this]() {
                 this->close();
@@ -38,7 +35,6 @@ MainWindow::MainWindow() {
 }
 
 MainWindow::~MainWindow() {
-    delete splitter;
     delete selectedFileName;
     delete selectFileButton;
     delete closeButton;
