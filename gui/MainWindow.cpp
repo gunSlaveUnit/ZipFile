@@ -12,11 +12,13 @@ MainWindow::MainWindow() {
     centralWidget->setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     centralLayout = new QGridLayout(centralWidget);
 
-    selectedFileName = new QLabel("Not Selected");
-    centralLayout->addWidget(selectedFileName, 0, 0);
+    fileLabel = new QLabel(tr("File: "));
+    centralLayout->addWidget(fileLabel, 0, 0);
+    selectedFileName = new QLabel("not selected");
+    centralLayout->addWidget(selectedFileName, 0, 1);
 
     selectFileButton = new QPushButton(tr("Select"));
-    centralLayout->addWidget(selectFileButton, 0, 1);
+    centralLayout->addWidget(selectFileButton, 1, 1);
     connect(selectFileButton, SIGNAL(clicked(bool)), this, SLOT(openFileDialog()));
 
     startButton = new QPushButton(tr("Start"));

@@ -25,14 +25,14 @@ public slots:
 private:
     const qint32 WINDOW_WIDTH = 300, WINDOW_HEIGHT = 200;
     const QString WINDOW_TITLE = "ZipFile";
-
-    AdaptiveHuffmanCoder coder;
-
     QGraphicsView *centralWidget;
     QGridLayout *centralLayout;
+    QLabel* fileLabel;
     QLabel *selectedFileName;
     QPushButton *selectFileButton;
     QPushButton *startButton;
+
+    AdaptiveHuffmanCoder coder;
 };
 
 
