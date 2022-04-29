@@ -52,5 +52,7 @@ void MainWindow::openFileDialog() {
     auto dialog = QFileDialog(this);
     dialog.setFileMode(QFileDialog::AnyFile);
     auto filename = dialog.getOpenFileName();
+    QFileInfo fi(filename);
+    filename = fi.fileName();
     selectedFileName->setText(filename.isEmpty() ? "Not Selected" : filename);
 }
