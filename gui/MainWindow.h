@@ -11,6 +11,7 @@
 #include <QGraphicsView>
 #include <QLabel>
 #include <QFileDialog>
+#include <QSplitter>
 
 #include "../coder/AdaptiveHuffmanCoder.h"
 
@@ -30,6 +31,7 @@ private:
     QLabel* fileLabel;
     QLabel *selectedFileName;
     QPushButton *selectFileButton;
+    QSplitter* splitter;
     QPushButton *startButton;
 
     AdaptiveHuffmanCoder coder;
