@@ -33,6 +33,7 @@ private:
     QPushButton *selectFileButton;
     QSplitter* splitter;
     QPushButton *startButton;
+    QPushButton *closeButton;
 
     AdaptiveHuffmanCoder coder;
 };

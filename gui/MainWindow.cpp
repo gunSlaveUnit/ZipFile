@@ -30,12 +30,20 @@ MainWindow::MainWindow() {
             [this] () {
         coder.encode(selectedFileName->text().toStdString());
     });
+
+    closeButton = new QPushButton(tr("Close"));
+    centralLayout->addWidget(closeButton, 3, 1);
+    connect(closeButton, &QPushButton::clicked, this,
+            [this] () {
+                this->close();
+            });
 }
 
 MainWindow::~MainWindow() {
     delete splitter;
     delete selectedFileName;
     delete selectFileButton;
+    delete closeButton;
     delete centralLayout;
     delete centralWidget;
 }
