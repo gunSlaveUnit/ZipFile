@@ -12,6 +12,7 @@
 #include <QLabel>
 #include <QFileDialog>
 #include <QSplitter>
+#include <QProgressBar>
 
 #include "../coder/AdaptiveHuffmanCoder.h"
 
@@ -42,6 +43,7 @@ private:
     QLabel *elapsedTimeTextValue;
     QLabel *compressionRatioLabel;
     QLabel *compressionRatioTextValue;
+    QProgressBar *progressBar;
 
     enum WORKING_MODES {
         ENCODE, DECODE

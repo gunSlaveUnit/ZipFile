@@ -33,17 +33,23 @@ MainWindow::MainWindow() {
 
     elapsedTimeLabel = new QLabel(tr("Elapsed time: "));
     centralLayout->addWidget(elapsedTimeLabel, 3, 0);
-    elapsedTimeTextValue = new QLabel(tr("0.0s"));
+    elapsedTimeTextValue = new QLabel(tr("12.4s"));
     centralLayout->addWidget(elapsedTimeTextValue, 3, 1);
     compressionRatioLabel = new QLabel(tr("Compression ratio: "));
     centralLayout->addWidget(compressionRatioLabel, 4, 0);
-    compressionRatioTextValue = new QLabel(tr("0%"));
+    compressionRatioTextValue = new QLabel(tr("82%"));
     centralLayout->addWidget(compressionRatioTextValue, 4, 1);
+
+    progressBar = new QProgressBar;
+    progressBar->setMaximum(100);
+    progressBar->setValue(73);
+    centralLayout->addWidget(progressBar, 5, 0, 1, 2);
 
     connectMethodDependMode();
 }
 
 MainWindow::~MainWindow() {
+    delete progressBar;
     delete compressionRatioTextValue;
     delete compressionRatioLabel;
     delete elapsedTimeTextValue;
