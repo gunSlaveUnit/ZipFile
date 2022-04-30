@@ -44,6 +44,10 @@ private:
     QLabel *compressionRatioLabel;
     QLabel *compressionRatioTextValue;
     QProgressBar *progressBar;
+    QLabel *sourceFileSize;
+    QLabel *sourceFileSizeValue;
+    QLabel *receivedFileSize;
+    QLabel *receivedFileSizeValue;
 
     enum WORKING_MODES {
         ENCODE, DECODE

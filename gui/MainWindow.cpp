@@ -18,7 +18,7 @@ MainWindow::MainWindow() {
     centralLayout->addWidget(selectedFileName, 0, 1);
 
     selectFileButton = new QPushButton(tr("Select"));
-    centralLayout->addWidget(selectFileButton, 1, 0);
+    centralLayout->addWidget(selectFileButton, 1, 0, 1, 2);
     connect(selectFileButton, SIGNAL(clicked(bool)), this, SLOT(openFileDialog()));
 
     startButton = new QPushButton(tr("Start"));
@@ -33,22 +33,39 @@ MainWindow::MainWindow() {
 
     elapsedTimeLabel = new QLabel(tr("Elapsed time: "));
     centralLayout->addWidget(elapsedTimeLabel, 3, 0);
+
     elapsedTimeTextValue = new QLabel(tr("12.4s"));
     centralLayout->addWidget(elapsedTimeTextValue, 3, 1);
+
+    sourceFileSize = new QLabel(tr("Source size: "));
+    centralLayout->addWidget(sourceFileSize, 4, 0);
+    sourceFileSizeValue = new QLabel(tr("50MB"));
+    centralLayout->addWidget(sourceFileSizeValue, 4, 1);
+
+    receivedFileSize = new QLabel(tr("Received size: "));
+    centralLayout->addWidget(receivedFileSize, 5, 0);
+    receivedFileSizeValue = new QLabel(tr("37MB"));
+    centralLayout->addWidget(receivedFileSizeValue, 5, 1);
+
     compressionRatioLabel = new QLabel(tr("Compression ratio: "));
-    centralLayout->addWidget(compressionRatioLabel, 4, 0);
+    centralLayout->addWidget(compressionRatioLabel, 6, 0);
+
     compressionRatioTextValue = new QLabel(tr("82%"));
-    centralLayout->addWidget(compressionRatioTextValue, 4, 1);
+    centralLayout->addWidget(compressionRatioTextValue, 6, 1);
 
     progressBar = new QProgressBar;
     progressBar->setMaximum(100);
     progressBar->setValue(73);
-    centralLayout->addWidget(progressBar, 5, 0, 1, 2);
+    centralLayout->addWidget(progressBar, 7, 0, 1, 2);
 
     connectMethodDependMode();
 }
 
 MainWindow::~MainWindow() {
+    delete sourceFileSize;
+    delete sourceFileSizeValue;
+    delete receivedFileSize;
+    delete receivedFileSizeValue;
     delete progressBar;
     delete compressionRatioTextValue;
     delete compressionRatioLabel;
