@@ -31,10 +31,23 @@ MainWindow::MainWindow() {
                 this->close();
             });
 
+    elapsedTimeLabel = new QLabel(tr("Elapsed time: "));
+    centralLayout->addWidget(elapsedTimeLabel, 3, 0);
+    elapsedTimeTextValue = new QLabel(tr("0.0s"));
+    centralLayout->addWidget(elapsedTimeTextValue, 3, 1);
+    compressionRatioLabel = new QLabel(tr("Compression ratio: "));
+    centralLayout->addWidget(compressionRatioLabel, 4, 0);
+    compressionRatioTextValue = new QLabel(tr("0%"));
+    centralLayout->addWidget(compressionRatioTextValue, 4, 1);
+
     connectMethodDependMode();
 }
 
 MainWindow::~MainWindow() {
+    delete compressionRatioTextValue;
+    delete compressionRatioLabel;
+    delete elapsedTimeTextValue;
+    delete elapsedTimeLabel;
     delete selectedFileName;
     delete selectFileButton;
     delete closeButton;

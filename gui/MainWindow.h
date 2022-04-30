@@ -38,6 +38,10 @@ private:
     QPushButton *selectFileButton;
     QPushButton *startButton;
     QPushButton *closeButton;
+    QLabel *elapsedTimeLabel;
+    QLabel *elapsedTimeTextValue;
+    QLabel *compressionRatioLabel;
+    QLabel *compressionRatioTextValue;
 
     enum WORKING_MODES {
         ENCODE, DECODE
