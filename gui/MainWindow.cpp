@@ -57,6 +57,9 @@ MainWindow::MainWindow() {
     progressBar->setMaximum(100);
     progressBar->setValue(73);
     centralLayout->addWidget(progressBar, 7, 0, 1, 2);
+    QPalette p = palette();
+    p.setColor(QPalette::Highlight, Qt::darkCyan);
+    setPalette(p);
 
     connectMethodDependMode();
 }
@@ -113,3 +116,13 @@ void MainWindow::connectMethodDependMode() {
                     coder.decode(selectedFileName->text().toStdString());
                 });
 }
+
+#ifndef QT_NO_CONTEXTMENU
+void MainWindow::contextMenuEvent(QContextMenuEvent *event) {
+    QMenu menu(this);
+    //menu.addAction(cutAct);
+    //menu.addAction(copyAct);
+    //menu.addAction(pasteAct);
+    menu.exec(event->globalPos());
+}
+#endif // QT_NO_CONTEXTMENU
