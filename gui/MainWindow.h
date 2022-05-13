@@ -13,6 +13,8 @@
 #include <QFileDialog>
 #include <QSplitter>
 #include <QProgressBar>
+#include <QMenu>
+#include <QContextMenuEvent>
 
 #include "../coder/AdaptiveHuffmanCoder.h"
 
@@ -56,6 +58,9 @@ private:
     AdaptiveHuffmanCoder coder;
 
     void setWorkingModeDependFileExt(const QString &ext);
+    #ifndef QT_NO_CONTEXTMENU
+        void contextMenuEvent(QContextMenuEvent *event) override;
+    #endif // QT_NO_CONTEXTMENU
 };
 
 
