@@ -65,8 +65,12 @@ private:
     uint_fast32_t opened_file_size;
     uint_fast32_t created_file_size;
 
+    std::chrono::time_point<std::chrono::high_resolution_clock> start;
+    std::chrono::time_point<std::chrono::high_resolution_clock> end;
+
     void setWorkingModeDependFileExt(const QString &ext);
     void set_compression_ratio_value();
+    void setElapsedTime();
     QString humanFileSize(const uint_fast32_t &bytes,
                           const bool &si,
                           const uint_fast32_t &precision);

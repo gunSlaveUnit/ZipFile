@@ -34,7 +34,7 @@ MainWindow::MainWindow() {
     elapsedTimeLabel = new QLabel(tr("Elapsed time: "));
     centralLayout->addWidget(elapsedTimeLabel, 3, 0);
 
-    elapsedTimeTextValue = new QLabel(tr("12.4s"));
+    elapsedTimeTextValue = new QLabel(tr("00:00:00:00"));
     centralLayout->addWidget(elapsedTimeTextValue, 3, 1);
 
     sourceFileSize = new QLabel(tr("Source size: "));
@@ -124,6 +124,7 @@ void MainWindow::connectMethodDependMode() {
 }
 
 #ifndef QT_NO_CONTEXTMENU
+
 void MainWindow::contextMenuEvent(QContextMenuEvent *event) {
     QMenu menu(this);
     //menu.addAction(cutAct);
@@ -132,20 +133,23 @@ void MainWindow::contextMenuEvent(QContextMenuEvent *event) {
     menu.exec(event->globalPos());
 }
 
-void MainWindow::setOpenedFileSizeLabelValue(const std::string & filename) {
+void MainWindow::setOpenedFileSizeLabelValue(const std::string &filename) {
     std::ifstream file(filename, std::ios::binary | std::ios::ate);
     opened_file_size = file.tellg();
     sourceFileSizeValue->setText(humanFileSize(opened_file_size, true, 2));
     file.close();
+    start = std::chrono::high_resolution_clock::now();
 }
 
-void MainWindow::setCreatedFileSizeLabelValue(const std::string & filename) {
+void MainWindow::setCreatedFileSizeLabelValue(const std::string &filename) {
     std::ifstream file(filename, std::ios::binary | std::ios::ate);
     created_file_size = file.tellg();
     receivedFileSizeValue->setText(humanFileSize(created_file_size, true, 2));
     file.close();
 
     set_compression_ratio_value();
+    end = std::chrono::high_resolution_clock::now();
+    setElapsedTime();
 }
 
 QString MainWindow::humanFileSize(const uint_fast32_t &bytes,
@@ -159,7 +163,7 @@ QString MainWindow::humanFileSize(const uint_fast32_t &bytes,
         return QString::number(size) + " B";
     }
 
-    std::array<std::array<QString, 8>, 2> suffixes {
+    std::array<std::array<QString, 8>, 2> suffixes{
             "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB",
             "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"
     };
@@ -176,13 +180,31 @@ QString MainWindow::humanFileSize(const uint_fast32_t &bytes,
     return QString::number(size) + " " + suffixes[si][u];
 }
 
-void MainWindow::setProgressBarProcessedBytesValue(const uint_fast32_t & processed, const uint_fast32_t & size) {
+void MainWindow::setProgressBarProcessedBytesValue(const uint_fast32_t &processed, const uint_fast32_t &size) {
     progressBar->setValue(ceil(processed * 100.0 / size));
 }
 
 void MainWindow::set_compression_ratio_value() {
-    auto ratio = ceil(created_file_size * 100.0 / opened_file_size );
+    auto ratio = ceil(created_file_size * 100.0 / opened_file_size);
     compressionRatioTextValue->setText(QString::number(ratio) + " %");
+}
+
+void MainWindow::setElapsedTime() {
+    std::chrono::duration<double> diff = end - start;
+    int ms = diff.count() * 1000;
+    int x = ms / 1000;
+    int s = x % 60;
+    x /= 60;
+    int m = x % 60;
+    x /= 60;
+    int h = x % 24;
+
+    elapsedTimeTextValue->setText(
+            QString::number(h) + ":" +
+            QString::number(m) + ":" +
+            QString::number(s) + ":" +
+            QString::number(ms % 1000)
+    );
 }
 
 
