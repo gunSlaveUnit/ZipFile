@@ -8,6 +8,8 @@
 void AdaptiveHuffmanCoder::encode(const std::string &filename) {
     clear();
 
+    emit send_opened_filename(filename);
+
     std::ifstream fin(filename, std::ios::in | std::ios::binary | std::ios::ate);
     if (!fin.is_open())
         throw std::runtime_error((std::stringstream("Can' open file ") << filename << " to encode data").str());
@@ -56,14 +58,20 @@ void AdaptiveHuffmanCoder::encode(const std::string &filename) {
         update(ch); // обновление дерева
 
         ++counter;
+        ++processed_bytes_amount;
+        emit byte_processed(processed_bytes_amount, fileSize);
     }
 
     fin.close();
     writer.close();
+
+    emit send_created_filename(outFilename);
 }
 
 void AdaptiveHuffmanCoder::decode(const std::string &filename) {
     clear();
+
+    emit send_opened_filename(filename);
 
     std::ifstream fin(filename, std::ios::in | std::ios::binary | std::ios::ate);
     if (!fin.is_open())
@@ -97,7 +105,8 @@ void AdaptiveHuffmanCoder::decode(const std::string &filename) {
         ext += c;
     }
 
-    ByteWriter writer((std::stringstream() << path.stem().string() << "." << ext).str());
+    auto outFilename = (std::stringstream() << path.stem().string() << "." << ext).str();
+    ByteWriter writer(outFilename);
 
     mode = UNENCODED_BYTE;
     decoderBuffer = BitBuffer();
@@ -109,10 +118,14 @@ void AdaptiveHuffmanCoder::decode(const std::string &filename) {
         handleByte(ch, writer);
 
         ++counter;
+        ++processed_bytes_amount;
+        emit byte_processed(processed_bytes_amount, fileSize);
     }
 
     fin.close();
     writer.close();
+
+    emit send_created_filename(outFilename);
 }
 
 void AdaptiveHuffmanCoder::clear() {
@@ -121,6 +134,7 @@ void AdaptiveHuffmanCoder::clear() {
     nodes.clear();
     for (int i = 0; i < 256; ++i)
         cache[i] = nullptr;
+    processed_bytes_amount = 0;
 }
 
 bool AdaptiveHuffmanCoder::reorderWeights() {
